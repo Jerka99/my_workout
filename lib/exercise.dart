@@ -8,8 +8,8 @@ class Exercise {
   final List<DateTime> completedSetsTimestamps;
 
   Exercise({
-    required this.name,
-    required this.seriesNumber,
+    this.name,
+    this.seriesNumber,
     this.restTime,
     this.stopwatchFullTime,
     List<DateTime>? completedSetsTimestamps,
@@ -90,7 +90,6 @@ class Exercise {
       stopwatchFullTime.hashCode ^
       completedSetsTimestamps.hashCode;
 
-  /// Helper for comparing lists
   static bool _listEquals(List<DateTime> a, List<DateTime> b) {
     if (a.length != b.length) return false;
     for (int i = 0; i < a.length; i++) {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:my_workout/exercise.dart';
 import 'package:my_workout/stopwatch_action.dart';
 import 'package:my_workout/stopwatch_widget.dart';
-import '../../main.dart';
-import 'app_state.dart';
+import '../../../main.dart';
+import '../app_state.dart';
 
 class Factory extends VmFactory<AppState, StopwatchConnector, ViewModel> {
   @override

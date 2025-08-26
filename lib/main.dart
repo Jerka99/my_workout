@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:my_workout/exercise.dart';
 import 'package:my_workout/preference_utils.dart';
 import 'package:my_workout/stopwatch_action.dart';
-import 'package:my_workout/stopwatch_connector.dart';
+import 'package:my_workout/connectors/stopwatch_connector.dart';
 
 import 'add_exercise.dart';
 import 'app_state.dart';
-import 'home_page.dart';
+import 'connectors/home_connector.dart';
+import 'pages/home_page.dart';
 
 late Store<AppState> store;
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
           ),
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
-        home: HomePage(),
+        home: HomePageConnector(),
       ),
     );
   }

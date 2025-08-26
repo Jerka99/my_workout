@@ -67,9 +67,10 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   }
 
   String _formatRemainingTime(Duration time) {
+    final hours = time.inHours.toString().padLeft(2, '0');
     final minutes = time.inMinutes.remainder(60).toString().padLeft(2, '0');
     final seconds = time.inSeconds.remainder(60).toString().padLeft(2, '0');
-    return '$minutes:$seconds';
+    return '$hours:$minutes:$seconds';
   }
 
   @override
@@ -82,11 +83,11 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
           children: [
             Text(
               widget.exercise?.name ?? "-",
-              style: TextStyle(color: Colors.white, fontSize: 15),
+              style: TextStyle(color: Colors.white, fontSize: 18),
             ),
             Text(
               _elapsedTimeString,
-              style: TextStyle(color: Colors.white, fontSize: 50),
+              style: TextStyle(color: Colors.white, fontSize: 45),
             ),
             SizedBox(
               height: 72,

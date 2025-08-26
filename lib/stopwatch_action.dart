@@ -42,7 +42,7 @@ class DisplayStopwatch extends ReduxAction<AppState> {
   @override
   Future<AppState?> reduce() async {
     String? actionName = await PreferenceUtils.getString("action_name");
-    if(actionName != null) return null;
+    if (actionName != null) return null;
     await PreferenceUtils.setInt('elapsed_time', 0);
     await PreferenceUtils.setString('action_name', exercise.name!);
     await PreferenceUtils.setInt(
@@ -182,12 +182,18 @@ class AskForResetStopwatchAction extends ReduxAction<AppState> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text("ARE YOU SURE TOU WANT TO END ACTIVITY?", style: TextStyle(color: Colors.white)),
+                  Text(
+                    "ARE YOU SURE TOU WANT TO END ACTIVITY?",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   Row(
                     children: [
                       Expanded(
                         child: TextButton(
-                          child: Text("CONTINUE ACTIVITY", style: TextStyle(color: Colors.white),),
+                          child: Text(
+                            "CONTINUE ACTIVITY",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -195,7 +201,10 @@ class AskForResetStopwatchAction extends ReduxAction<AppState> {
                       ),
                       Expanded(
                         child: TextButton(
-                          child: Text("END ACTIVITY", style: TextStyle(color: Colors.white)),
+                          child: Text(
+                            "END ACTIVITY",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           onPressed: () {
                             dispatch(ResetStopwatchAction());
                             Navigator.of(context).pop();
@@ -228,7 +237,7 @@ class ResetStopwatchAction extends ReduxAction<AppState> {
 
     return state.copyWith(
       stopWatchState: StopwatchState.initial(),
-      exercise: store.state.exercise.copyWith(name: null),
+      exercise: Exercise.initial(),
     );
   }
 }
@@ -245,9 +254,12 @@ class LoadStartTimeAction extends ReduxAction<AppState> {
     bool? isRunning = PreferenceUtils.getBool('is_running') ?? false;
     int? savedElapsed = PreferenceUtils.getInt('elapsed_time');
     int? startTime = PreferenceUtils.getInt('start_time');
+    String? actionName = PreferenceUtils.getString("action_name");
+
     Duration elapsedTime = Duration(milliseconds: savedElapsed ?? 0);
 
     return state.copyWith(
+      exercise: state.exercise.copyWith(name: actionName),
       stopWatchState: state.stopWatchState.copyWith(
         isRunning: isRunning,
         elapsedTime: elapsedTime,

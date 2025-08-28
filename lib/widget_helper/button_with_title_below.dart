@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ButtonWithTitleBelow extends StatefulWidget {
@@ -38,12 +37,23 @@ class _ButtonWithTitleBelowState extends State<ButtonWithTitleBelow> {
                     widget.enabled ? widget.enabledColor : Colors.grey,
                 padding: EdgeInsets.zero,
               ),
-              child: Icon(widget.icon ?? Icons.work_outline),
+              child: Icon(
+                widget.icon ?? Icons.work_outline,
+                color: Colors.white,
+                size: 33,
+              ),
               onPressed: () => widget.enabled ? widget.onClick() : {},
             ),
           ),
-          SizedBox(height: 30),
-          Text(widget.text, style: TextStyle(color: Colors.white)),
+          SizedBox(height: 11),
+          Text(
+            widget.text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );

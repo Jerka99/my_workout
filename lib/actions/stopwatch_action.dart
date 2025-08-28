@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:my_workout/exercise.dart';
+import 'package:my_workout/models/exercise.dart';
 import 'package:my_workout/preference_utils.dart';
 import 'package:my_workout/stopwatch_state.dart';
 import '../../app_state.dart';
 import '../main.dart';
+import '../widget_helper/my_dialog.dart';
 
 class RebuildAction extends ReduxAction<AppState> {
   int time;
@@ -174,48 +175,19 @@ class AskForResetStopwatchAction extends ReduxAction<AppState> {
       builder: (context) {
         return Material(
           type: MaterialType.transparency,
-          child: Center(
-            child: Container(
-              height: 144,
-              color: Colors.red,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    "ARE YOU SURE TOU WANT TO END ACTIVITY?",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          child: Text(
-                            "CONTINUE ACTIVITY",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          child: Text(
-                            "END ACTIVITY",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            dispatch(ResetStopwatchAction());
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          child: MyDialog(
+            onLeftButton: () {
+              Navigator.of(context).pop();
+            },
+
+            onRightButton: () {
+              dispatch(ResetStopwatchAction());
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            leftText: "Continue",
+            rightText: "End",
+            title: "Are you sure you want to end activity?",
           ),
         );
       },

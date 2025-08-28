@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:my_workout/exercise.dart';
+import 'package:my_workout/models/exercise.dart';
 import 'package:my_workout/actions/stopwatch_action.dart';
-import 'package:my_workout/stopwatch_widget.dart';
+import 'package:my_workout/pages/stopwatch_widget_page.dart';
 import '../../../main.dart';
 import '../actions/add_one_set_action.dart';
 import '../app_state.dart';

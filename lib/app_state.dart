@@ -1,4 +1,4 @@
-import 'package:my_workout/exercise.dart';
+import 'package:my_workout/models/exercise.dart';
 import 'package:my_workout/stopwatch_state.dart';
 
 import 'models/exercise_session.dart';

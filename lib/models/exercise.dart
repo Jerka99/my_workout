@@ -1,4 +1,4 @@
-import 'models/one_set.dart';
+import 'one_set.dart';
 
 class Exercise {
   final String? name;
@@ -17,7 +17,6 @@ class Exercise {
     List<OneSet>? completedSets,
   }) : completedSets = completedSets ?? [];
 
-  /// Factory for initial empty exercise
   factory Exercise.initial() {
     return Exercise(
       name: null,
@@ -29,7 +28,6 @@ class Exercise {
     );
   }
 
-  /// Create a copy with new values
   Exercise copyWith({
     String? name,
     int? seriesNumber,
@@ -48,7 +46,6 @@ class Exercise {
     );
   }
 
-  /// JSON serialization
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
     name: json['name'],
     seriesNumber: json['seriesNumber'],

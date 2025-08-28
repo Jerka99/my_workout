@@ -18,9 +18,8 @@ class _ExerciseAddPageState extends State<ExerciseAddPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Add New Exercise')),
-      body: Padding(
+    return
+       Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -32,7 +31,6 @@ class _ExerciseAddPageState extends State<ExerciseAddPage> {
             ElevatedButton(onPressed: _addExercise, child: Text('Add')),
           ],
         ),
-      ),
-    );
+      );
   }
 }

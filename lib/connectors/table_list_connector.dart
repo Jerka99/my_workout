@@ -1,9 +1,9 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:my_workout/exercise.dart';
+import 'package:my_workout/models/exercise.dart';
 import '../../../main.dart';
 import '../app_state.dart';
-import '../pages/table_list.dart';
+import '../pages/table_list_page.dart';
 
 class Factory extends VmFactory<AppState, TableListConnector, ViewModel> {
   @override
@@ -18,7 +18,7 @@ class TableListConnector extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       vm: () => Factory(),
       builder: (BuildContext context, ViewModel vm) {
-        return TableList(exercise: vm.exercise);
+        return TableListPage(exercise: vm.exercise);
       },
     );
   }

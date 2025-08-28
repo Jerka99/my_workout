@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           scaffoldBackgroundColor: Color.fromRGBO(242, 242, 242, 1),
-
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
               TargetPlatform.android: CustomPageTransitionBuilder(),
@@ -46,12 +45,19 @@ class MyApp extends StatelessWidget {
           ),
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
+        builder: (context, child) {
+          return Scaffold(
+            backgroundColor: Colors.red,
+            body: Center(
+              child: SizedBox(height: 210, width: 210, child: child),
+            ),
+          );
+        },
         home: HomePageConnector(),
       ),
     );
   }
 }
-
 
 class CustomPageTransitionBuilder extends PageTransitionsBuilder {
   const CustomPageTransitionBuilder();

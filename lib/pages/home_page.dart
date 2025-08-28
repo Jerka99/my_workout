@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_workout/connectors/stopwatch_connector.dart';
 import 'package:rotary_scrollbar/widgets/rotary_scrollbar.dart';
-import '../add_exercise.dart';
-import '../button_with_title_below.dart';
+import 'add_exercise_page.dart';
+import '../widget_helper/button_with_title_below.dart';
 import '../connectors/list_connector.dart';
 import '../connectors/table_list_connector.dart';
-import '../exercise.dart';
+import '../models/exercise.dart';
 
 class HomePage extends StatefulWidget {
   final Exercise? activeExercise;
@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<String> exercises = ['Pull Ups', 'Push Ups', 'Squats'];
-  final scrollController = PageController();
+  final _scrollController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +29,17 @@ class _HomePageState extends State<HomePage> {
         body: Container(
           color: Colors.grey[900],
           child: RotaryScrollbar(
-            controller: scrollController,
+            controller: _scrollController,
             child: PageView.builder(
               scrollDirection: Axis.vertical,
-              controller: scrollController,
+              controller: _scrollController,
               // scrollDirection: Axis.horizontal,
               itemCount: exercises.length + 2,
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return ButtonWithTitleBelow(
                     icon: Icons.add,
-                    text: "add",
+                    text: "Add",
                     onClick: () {
                       Navigator.push(
                         context,
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                 if (index == 1) {
                   return ButtonWithTitleBelow(
                     icon: Icons.list,
-                    text: "list",
+                    text: "List",
                     onClick: () {
                       Navigator.push(
                         context,
@@ -73,12 +73,9 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (_) => Scaffold(
-                              // backgroundColor: Colors.black,
-                              body: StopwatchWithList(
-                                stopwatch: StopwatchConnector(),
-                                list: TableListConnector(),
-                              ),
+                            (_) => StopwatchWithList(
+                              stopwatch: StopwatchConnector(),
+                              list: TableListConnector(),
                             ),
                       ),
                     );
@@ -108,15 +105,21 @@ class StopwatchWithList extends StatefulWidget {
 }
 
 class _StopwatchWithListState extends State<StopwatchWithList> {
+  final _scrollController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 200,
-        width: 200,
-        color: Colors.grey[900],
+    return Container(
+      color: Colors.grey[900],
+      child: RotaryScrollbar(
+        controller: _scrollController,
         child: ListView(
-          children: [widget.stopwatch, Container(height: 22), widget.list],
+          controller: _scrollController,
+          children: [
+            widget.stopwatch,
+            Container(height: 22),
+            Padding(padding: const EdgeInsets.all(12.0), child: widget.list),
+          ],
         ),
       ),
     );

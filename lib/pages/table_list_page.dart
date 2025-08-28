@@ -1,20 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_workout/exercise.dart';
+import 'package:my_workout/models/exercise.dart';
 
 import '../models/one_set.dart';
 
-class TableList extends StatelessWidget {
+class TableListPage extends StatelessWidget {
   final Exercise? exercise;
 
-  const TableList({super.key, this.exercise});
+  const TableListPage({super.key, this.exercise});
 
   @override
   Widget build(BuildContext context) {
     return Table(
       border: TableBorder.all(width: 2, color: Colors.green),
+      columnWidths: const {
+        0: FlexColumnWidth(1),
+        1: FlexColumnWidth(2),
+        2: FlexColumnWidth(1),
+      },
       children: [
-        TableRow(children: createRow("Set", "Time", "Repeats")),
+        TableRow(children: createRow("Set", "Time", "Rep")),
         if (exercise?.completedSets != null)
           ...exercise!.completedSets.asMap().entries.map((entry) {
             final i = entry.key;

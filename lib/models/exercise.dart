@@ -2,7 +2,8 @@ import 'one_set.dart';
 
 class Exercise {
   final String? name;
-  final int? seriesNumber;
+  final int? setsNumber;
+  final int? repsNumber;
   final int? restTime;
   final int? stopwatchFullTime;
   final DateTime? stopwatchStartTime;
@@ -10,7 +11,8 @@ class Exercise {
 
   Exercise({
     this.name,
-    this.seriesNumber,
+    this.setsNumber,
+    this.repsNumber,
     this.restTime,
     this.stopwatchFullTime,
     this.stopwatchStartTime,
@@ -20,7 +22,8 @@ class Exercise {
   factory Exercise.initial() {
     return Exercise(
       name: null,
-      seriesNumber: null,
+      setsNumber: null,
+      repsNumber: null,
       restTime: null,
       stopwatchFullTime: null,
       completedSets: [],
@@ -30,7 +33,8 @@ class Exercise {
 
   Exercise copyWith({
     String? name,
-    int? seriesNumber,
+    int? setsNumber,
+    int? repsNumber,
     int? restTime,
     int? stopwatchFullTime,
     List<OneSet>? completedSets,
@@ -38,7 +42,8 @@ class Exercise {
   }) {
     return Exercise(
       name: name ?? this.name,
-      seriesNumber: seriesNumber ?? this.seriesNumber,
+      setsNumber: setsNumber ?? this.setsNumber,
+      repsNumber: repsNumber ?? this.repsNumber,
       restTime: restTime ?? this.restTime,
       stopwatchFullTime: stopwatchFullTime ?? this.stopwatchFullTime,
       completedSets: completedSets ?? List.from(this.completedSets),
@@ -48,21 +53,21 @@ class Exercise {
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
     name: json['name'],
-    seriesNumber: json['seriesNumber'],
+    setsNumber: json['setsNumber'],
     restTime: json['restTime'],
     stopwatchFullTime: json['stopwatchFullTime'],
   );
 
   Map<String, dynamic> toJson() => {
     'name': name,
-    'seriesNumber': seriesNumber,
+    'setsNumber': setsNumber,
     'restTime': restTime,
     'stopwatchFullTime': stopwatchFullTime,
   };
 
   @override
   String toString() {
-    return 'Exercise{name: $name, seriesNumber: $seriesNumber, restTime: $restTime, stopwatchFullTime: $stopwatchFullTime, completedSets: $completedSets, stopwatchStartTime: $stopwatchStartTime}';
+    return 'Exercise{name: $name, setsNumber: $setsNumber, repsNumber: $repsNumber, restTime: $restTime, stopwatchFullTime: $stopwatchFullTime, completedSets: $completedSets, stopwatchStartTime: $stopwatchStartTime}';
   }
 
   @override
@@ -71,7 +76,8 @@ class Exercise {
       other is Exercise &&
           runtimeType == other.runtimeType &&
           name == other.name &&
-          seriesNumber == other.seriesNumber &&
+          setsNumber == other.setsNumber &&
+          repsNumber == other.repsNumber &&
           restTime == other.restTime &&
           stopwatchFullTime == other.stopwatchFullTime &&
           completedSets == other.completedSets &&
@@ -80,7 +86,8 @@ class Exercise {
   @override
   int get hashCode => Object.hash(
     name,
-    seriesNumber,
+    setsNumber,
+    repsNumber,
     restTime,
     stopwatchFullTime,
     completedSets,

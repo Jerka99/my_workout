@@ -11,27 +11,31 @@ class TableListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      border: TableBorder.all(width: 2, color: Colors.green),
-      columnWidths: const {
-        0: FlexColumnWidth(1),
-        1: FlexColumnWidth(2),
-        2: FlexColumnWidth(1),
-      },
+    return Column(
       children: [
-        TableRow(children: createRow("Set", "Time", "Rep")),
-        if (exercise?.completedSets != null)
-          ...exercise!.completedSets.asMap().entries.map((entry) {
-            final i = entry.key;
-            OneSet set = entry.value;
-            String moment = set.moment;
-            if (set.moment.startsWith("00:")) {
-              moment = set.moment.substring(3);
-            }
-            return TableRow(
-              children: createRow("${i + 1}.", moment, set.repeats),
-            );
-          }),
+        Table(
+          border: TableBorder.all(width: 2, color: Colors.green),
+          columnWidths: const {
+            0: FlexColumnWidth(1),
+            1: FlexColumnWidth(2),
+            2: FlexColumnWidth(1),
+          },
+          children: [
+            TableRow(children: createRow("Set", "Time", "Rep")),
+            if (exercise?.completedSets != null)
+              ...exercise!.completedSets.asMap().entries.map((entry) {
+                final i = entry.key;
+                OneSet set = entry.value;
+                String moment = set.moment;
+                if (set.moment.startsWith("00:")) {
+                  moment = set.moment.substring(3);
+                }
+                return TableRow(
+                  children: createRow("${i + 1}.", moment, set.repeats),
+                );
+              }),
+          ],
+        ),
       ],
     );
   }

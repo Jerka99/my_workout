@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
         builder: (context, child) {
           return Scaffold(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.black,
             body: Center(
               child: SizedBox(height: 210, width: 210, child: child),
             ),

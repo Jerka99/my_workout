@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_workout/models/exercise.dart';
 
 import '../models/one_set.dart';
+import 'number_picker_page.dart';
 
 class StopwatchWidget extends StatefulWidget {
   final Duration elapsedTime;
@@ -34,6 +35,7 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   late String _elapsedTimeString;
   late int finishTime;
   late Duration duration = const Duration(milliseconds: 0);
+  int reps = 0;
 
   @override
   void initState() {
@@ -64,6 +66,20 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
     return '$hours:$minutes:$seconds';
   }
 
+  Future<void> _chooseNumber(String label, int currentValue) async {
+    final newValue = await Navigator.of(context).push<int>(
+      MaterialPageRoute(
+        builder:
+            (_) => NumberPickerPage(label: label, initialValue: currentValue),
+      ),
+    );
+    if (newValue != null) {
+      setState(() {
+        reps = newValue;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -82,15 +98,21 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 12),
+            SizedBox(height: 20),
             Text(
               widget.exercise?.name ?? "-",
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
             GestureDetector(
-              onDoubleTap: () {
+              onDoubleTap: () async {
+                if (widget.exercise?.repsNumber == null) {
+                  await _chooseNumber("reps", reps);
+                }
                 widget.addOneSet(
-                  OneSet(_formatRemainingTime(duration), 5.toString()),
+                  OneSet(
+                    _formatRemainingTime(duration),
+                    (widget.exercise?.repsNumber ?? reps).toString(),
+                  ),
                   widget.exercise!.name!,
                 );
               },

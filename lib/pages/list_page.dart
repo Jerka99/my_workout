@@ -13,39 +13,42 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final scrollController = PageController();
 
-    return RotaryScrollbar(
-      controller: scrollController,
-      child: ListView.builder(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 30.0),
+      child: RotaryScrollbar(
         controller: scrollController,
-        padding: const EdgeInsets.all(8.0),
-        itemCount: sessionList.length,
-        itemBuilder: (context, index) {
-          final session = sessionList[index];
-          return Card(
-            color: Colors.grey[900],
-            margin: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${session.dateTime.month.toString().padLeft(2, '0')}.${session.dateTime.day.toString().padLeft(2, '0')}.${session.dateTime.year}. - ${session.exerciseName}",
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+        child: ListView.builder(
+          controller: scrollController,
+          padding: const EdgeInsets.all(8.0),
+          itemCount: sessionList.length,
+          itemBuilder: (context, index) {
+            final session = sessionList[index];
+            return Card(
+              color: Colors.grey[900],
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${session.dateTime.month.toString().padLeft(2, '0')}.${session.dateTime.day.toString().padLeft(2, '0')}.${session.dateTime.year}. - ${session.exerciseName}",
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  TableListPage(
-                    exercise: Exercise(completedSets: session.completedSets),
-                  ),
-                ],
+                    const SizedBox(height: 8),
+                    TableListPage(
+                      exercise: Exercise(completedSets: session.completedSets),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

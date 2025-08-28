@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_workout/connectors/stopwatch_connector.dart';
+import 'package:my_workout/main.dart';
 import 'package:rotary_scrollbar/widgets/rotary_scrollbar.dart';
+import '../connectors/start_exercise_page_connector.dart';
 import 'add_exercise_page.dart';
 import '../widget_helper/button_with_title_below.dart';
 import '../connectors/list_connector.dart';
@@ -10,9 +12,8 @@ import '../models/exercise.dart';
 
 class HomePage extends StatefulWidget {
   final Exercise? activeExercise;
-  final Function(Exercise exercise) onActivitySelect;
 
-  HomePage({super.key, this.activeExercise, required this.onActivitySelect});
+  HomePage({super.key, this.activeExercise});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -25,15 +26,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      child: Scaffold(
-        body: Container(
+        child: Container(
           color: Colors.grey[900],
           child: RotaryScrollbar(
             controller: _scrollController,
             child: PageView.builder(
               scrollDirection: Axis.vertical,
               controller: _scrollController,
-              // scrollDirection: Axis.horizontal,
               itemCount: exercises.length + 2,
               itemBuilder: (context, index) {
                 if (index == 0) {
@@ -68,14 +67,25 @@ class _HomePageState extends State<HomePage> {
                       widget.activeExercise?.name == null,
                   text: exercise,
                   onClick: () async {
-                    await widget.onActivitySelect(Exercise(name: exercise));
+                    if (store.state.exercise.name != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => StopwatchWithList(
+                                stopwatch: StopwatchConnector(),
+                                list: TableListConnector(),
+                              ),
+                        ),
+                      );
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder:
-                            (_) => StopwatchWithList(
-                              stopwatch: StopwatchConnector(),
-                              list: TableListConnector(),
+                            (_) => StartExercisePageConnector(
+                              exerciseName: exercise,
                             ),
                       ),
                     );
@@ -84,7 +94,6 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-        ),
       ),
     );
   }
@@ -118,7 +127,8 @@ class _StopwatchWithListState extends State<StopwatchWithList> {
           children: [
             widget.stopwatch,
             Container(height: 22),
-            Padding(padding: const EdgeInsets.all(12.0), child: widget.list),
+            Padding(padding: const EdgeInsets.all(12.0), child: widget.list,),
+            Container(height: 30),
           ],
         ),
       ),

@@ -9,11 +9,7 @@ import '../app_state.dart';
 
 class Factory extends VmFactory<AppState, HomePageConnector, ViewModel> {
   @override
-  ViewModel fromStore() => ViewModel(
-    exercise: store.state.exercise,
-    onActivitySelect:
-        (Exercise exercise) async => await dispatch(DisplayStopwatch(exercise: exercise)),
-  );
+  ViewModel fromStore() => ViewModel(exercise: store.state.exercise);
 }
 
 class HomePageConnector extends StatelessWidget {
@@ -29,10 +25,7 @@ class HomePageConnector extends StatelessWidget {
         }
       },
       builder: (BuildContext context, ViewModel vm) {
-        return HomePage(
-          activeExercise: vm.exercise,
-          onActivitySelect: vm.onActivitySelect,
-        );
+        return HomePage(activeExercise: vm.exercise);
       },
     );
   }
@@ -40,9 +33,8 @@ class HomePageConnector extends StatelessWidget {
 
 class ViewModel extends Vm {
   final Exercise? exercise;
-  final Function(Exercise exercise) onActivitySelect;
 
-  ViewModel({required this.exercise, required this.onActivitySelect});
+  ViewModel({required this.exercise});
 
   @override
   bool operator ==(Object other) =>

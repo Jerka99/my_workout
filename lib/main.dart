@@ -1,21 +1,24 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:my_workout/exercise.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:my_workout/preference_utils.dart';
-import 'package:my_workout/stopwatch_action.dart';
-import 'package:my_workout/connectors/stopwatch_connector.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
-import 'add_exercise.dart';
 import 'app_state.dart';
 import 'connectors/home_connector.dart';
-import 'pages/home_page.dart';
 
 late Store<AppState> store;
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
+Future<void> initHive() async {
+  await Hive.initFlutter();
+  await Hive.openBox<List>('exerciseBox');
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  WakelockPlus.enable();
+  initHive();
   await PreferenceUtils.init();
   store = Store<AppState>(initialState: AppState.initialState());
 

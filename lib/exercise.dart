@@ -1,19 +1,21 @@
-import 'dart:convert';
+import 'models/one_set.dart';
 
 class Exercise {
   final String? name;
   final int? seriesNumber;
   final int? restTime;
   final int? stopwatchFullTime;
-  final List<DateTime> completedSetsTimestamps;
+  final DateTime? stopwatchStartTime;
+  final List<OneSet> completedSets;
 
   Exercise({
     this.name,
     this.seriesNumber,
     this.restTime,
     this.stopwatchFullTime,
-    List<DateTime>? completedSetsTimestamps,
-  }) : completedSetsTimestamps = completedSetsTimestamps ?? [];
+    this.stopwatchStartTime,
+    List<OneSet>? completedSets,
+  }) : completedSets = completedSets ?? [];
 
   /// Factory for initial empty exercise
   factory Exercise.initial() {
@@ -22,7 +24,8 @@ class Exercise {
       seriesNumber: null,
       restTime: null,
       stopwatchFullTime: null,
-      completedSetsTimestamps: [],
+      completedSets: [],
+      stopwatchStartTime: null,
     );
   }
 
@@ -32,15 +35,16 @@ class Exercise {
     int? seriesNumber,
     int? restTime,
     int? stopwatchFullTime,
-    List<DateTime>? completedSetsTimestamps,
+    List<OneSet>? completedSets,
+    DateTime? stopwatchStartTime,
   }) {
     return Exercise(
       name: name ?? this.name,
       seriesNumber: seriesNumber ?? this.seriesNumber,
       restTime: restTime ?? this.restTime,
       stopwatchFullTime: stopwatchFullTime ?? this.stopwatchFullTime,
-      completedSetsTimestamps:
-          completedSetsTimestamps ?? List.from(this.completedSetsTimestamps),
+      completedSets: completedSets ?? List.from(this.completedSets),
+      stopwatchStartTime: stopwatchStartTime ?? this.stopwatchStartTime,
     );
   }
 
@@ -50,11 +54,6 @@ class Exercise {
     seriesNumber: json['seriesNumber'],
     restTime: json['restTime'],
     stopwatchFullTime: json['stopwatchFullTime'],
-    completedSetsTimestamps:
-        (json['completedSetsTimestamps'] as List<dynamic>?)
-            ?.map((e) => DateTime.parse(e))
-            .toList() ??
-        [],
   );
 
   Map<String, dynamic> toJson() => {
@@ -62,39 +61,32 @@ class Exercise {
     'seriesNumber': seriesNumber,
     'restTime': restTime,
     'stopwatchFullTime': stopwatchFullTime,
-    'completedSetsTimestamps':
-        completedSetsTimestamps.map((e) => e.toIso8601String()).toList(),
   };
 
   @override
   String toString() {
-    return jsonEncode(toJson());
+    return 'Exercise{name: $name, seriesNumber: $seriesNumber, restTime: $restTime, stopwatchFullTime: $stopwatchFullTime, completedSets: $completedSets, stopwatchStartTime: $stopwatchStartTime}';
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Exercise &&
-        other.name == name &&
-        other.seriesNumber == seriesNumber &&
-        other.restTime == restTime &&
-        other.stopwatchFullTime == stopwatchFullTime &&
-        _listEquals(other.completedSetsTimestamps, completedSetsTimestamps);
-  }
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Exercise &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          seriesNumber == other.seriesNumber &&
+          restTime == other.restTime &&
+          stopwatchFullTime == other.stopwatchFullTime &&
+          completedSets == other.completedSets &&
+          stopwatchStartTime == other.stopwatchStartTime;
 
   @override
-  int get hashCode =>
-      name.hashCode ^
-      seriesNumber.hashCode ^
-      restTime.hashCode ^
-      stopwatchFullTime.hashCode ^
-      completedSetsTimestamps.hashCode;
-
-  static bool _listEquals(List<DateTime> a, List<DateTime> b) {
-    if (a.length != b.length) return false;
-    for (int i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
-  }
+  int get hashCode => Object.hash(
+    name,
+    seriesNumber,
+    restTime,
+    stopwatchFullTime,
+    completedSets,
+    stopwatchStartTime,
+  );
 }

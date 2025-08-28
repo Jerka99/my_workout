@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:my_workout/exercise.dart';
-import 'package:my_workout/stopwatch_action.dart';
+import 'package:my_workout/actions/stopwatch_action.dart';
 import 'package:my_workout/stopwatch_widget.dart';
 import '../../../main.dart';
+import '../actions/add_one_set_action.dart';
 import '../app_state.dart';
+import '../models/one_set.dart';
 
 class Factory extends VmFactory<AppState, StopwatchConnector, ViewModel> {
   @override
@@ -18,6 +20,7 @@ class Factory extends VmFactory<AppState, StopwatchConnector, ViewModel> {
     resetStopwatch: () => store.dispatch(AskForResetStopwatchAction()),
     exercise: store.state.exercise,
     time: store.state.stopWatchState.elapsedTime.inSeconds,
+    addOneSet: (OneSet oneSet, String name) => dispatch(AddOneSetAction(oneSet: oneSet, name: name)),
   );
 }
 
@@ -43,6 +46,7 @@ class StopwatchConnector extends StatelessWidget {
           pauseStopwatch: vm.pauseStopwatch,
           resetStopwatch: vm.resetStopwatch,
           exercise: vm.exercise,
+          addOneSet: vm.addOneSet,
         );
       },
     );
@@ -57,6 +61,7 @@ class ViewModel extends Vm {
   final Function resetStopwatch;
   final Exercise? exercise;
   final int? time;
+  final Function(OneSet oneSet, String name) addOneSet;
 
   ViewModel({
     this.time,
@@ -66,6 +71,7 @@ class ViewModel extends Vm {
     required this.pauseStopwatch,
     required this.resetStopwatch,
     required this.exercise,
+    required this.addOneSet,
   });
 
   @override
@@ -76,16 +82,12 @@ class ViewModel extends Vm {
           runtimeType == other.runtimeType &&
           elapsedTime == other.elapsedTime &&
           isRunning == other.isRunning &&
-          time == other.time &&
-          exercise == other.exercise;
+          exercise == other.exercise &&
+          time == other.time;
 
   @override
   int get hashCode =>
-      super.hashCode ^
-      elapsedTime.hashCode ^
-      isRunning.hashCode ^
-      exercise.hashCode ^
-      time.hashCode;
+      Object.hash(super.hashCode, elapsedTime, isRunning, exercise, time);
 
   @override
   String toString() {

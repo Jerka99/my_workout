@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:my_workout/exercise.dart';
 import 'package:my_workout/preference_utils.dart';
 import 'package:my_workout/stopwatch_state.dart';
-import '../app_state.dart';
-import 'main.dart';
+import '../../app_state.dart';
+import '../main.dart';
 
 class RebuildAction extends ReduxAction<AppState> {
   int time;

@@ -1,6 +1,8 @@
-import 'dart:math';
+import 'dart:math' as Math;
 import 'package:flutter/material.dart';
 import 'package:my_workout/exercise.dart';
+
+import 'models/one_set.dart';
 
 class StopwatchWidget extends StatefulWidget {
   final Duration elapsedTime;
@@ -10,6 +12,7 @@ class StopwatchWidget extends StatefulWidget {
   final Function resetStopwatch;
   final Exercise? exercise;
   final int time;
+  final Function(OneSet oneSet, String name) addOneSet;
 
   const StopwatchWidget({
     super.key,
@@ -20,6 +23,7 @@ class StopwatchWidget extends StatefulWidget {
     required this.resetStopwatch,
     required this.exercise,
     required this.time,
+    required this.addOneSet,
   });
 
   @override
@@ -34,9 +38,8 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   @override
   void initState() {
     super.initState();
-    finishTime = 5;
     _elapsedTimeString = _formatRemainingTime(
-      Duration(seconds: min(widget.elapsedTime.inSeconds, finishTime * 60)),
+      Duration(seconds: widget.elapsedTime.inSeconds),
     );
     _updateElapsedTime();
   }
@@ -48,22 +51,10 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
   }
 
   void _updateElapsedTime() {
-    duration = Duration(
-      seconds: min(
-        widget.time,
-        Duration(seconds: finishTime * 60).inMilliseconds,
-      ),
-    );
+    duration = Duration(seconds: widget.time);
     setState(() {
       _elapsedTimeString = _formatRemainingTime(duration);
     });
-    if (isStopwatchDisabled()) {
-      // widget.pauseStopwatch();
-    }
-  }
-
-  bool isStopwatchDisabled() {
-    return duration.inSeconds >= Duration(minutes: finishTime).inSeconds;
   }
 
   String _formatRemainingTime(Duration time) {
@@ -75,71 +66,122 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.exercise?.name ?? "-",
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
-            Text(
-              _elapsedTimeString,
-              style: TextStyle(color: Colors.white, fontSize: 45),
-            ),
-            SizedBox(
-              height: 72,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.white,
-                        iconColor: Colors.black,
-                      ),
-                      onPressed: () {
-                        if (widget.isRunning == false) {
-                          widget.startStopwatch();
-                        }
-
-                        if (widget.isRunning == true) {
-                          widget.pauseStopwatch();
-                        }
-                      },
-                      child:
-                          widget.isRunning && !isStopwatchDisabled()
-                              ? Icon(Icons.cancel)
-                              : Icon(Icons.start),
-                    ),
-                  ),
-                  SizedBox(width: 33),
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        iconColor: Colors.white,
-                        backgroundColor: const Color.fromRGBO(210, 64, 64, 1),
-                      ),
-                      onPressed: () {
-                        widget.resetStopwatch();
-                      },
-                      child: Icon(Icons.close),
-                    ),
-                  ),
-                ],
+    return Container(
+      child: Stack(
+        children: [
+          if (false)
+            Positioned.fill(
+              child: CustomPaint(
+                size: const Size(200, 200),
+                painter: DottedRingPainter(
+                  dotsCount: widget.exercise?.completedSets.length ?? 0,
+                  radius: 90,
+                  dotColor: Colors.grey,
+                ),
               ),
             ),
-          ],
-        ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 12),
+              Text(
+                widget.exercise?.name ?? "-",
+                style: TextStyle(color: Colors.white, fontSize: 14),
+              ),
+              GestureDetector(
+                onDoubleTap: () {
+                  widget.addOneSet(
+                    OneSet(_formatRemainingTime(duration), 5.toString()),
+                    widget.exercise!.name!,
+                  );
+                },
+                child: Text(
+                  _elapsedTimeString,
+                  style: TextStyle(color: Colors.white, fontSize: 40),
+                ),
+              ),
+              SizedBox(
+                height: 72,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          backgroundColor: Colors.white,
+                          iconColor: Colors.grey[900],
+                        ),
+                        onPressed: () {
+                          if (widget.isRunning == false) {
+                            widget.startStopwatch();
+                          }
+
+                          if (widget.isRunning == true) {
+                            widget.pauseStopwatch();
+                          }
+                        },
+                        child:
+                            widget.isRunning
+                                ? Icon(Icons.stop)
+                                : Icon(Icons.not_started_sharp),
+                      ),
+                    ),
+                    SizedBox(width: 33),
+                    SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          iconColor: Colors.white,
+                          backgroundColor: const Color.fromRGBO(210, 64, 64, 1),
+                        ),
+                        onPressed: () {
+                          widget.resetStopwatch();
+                        },
+                        child: Icon(Icons.close),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
+}
+
+class DottedRingPainter extends CustomPainter {
+  final int dotsCount;
+  final double radius;
+  final Color dotColor;
+
+  DottedRingPainter({
+    required this.dotsCount,
+    required this.radius,
+    this.dotColor = const Color(0xFF000000),
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final paint = Paint()..color = dotColor;
+
+    for (int i = 0; i < dotsCount; i++) {
+      double angle = i * (180 / dotsCount) * (Math.pi / 180);
+
+      final dx = center.dx + radius * Math.cos(angle - Math.pi);
+      final dy = center.dy + radius * Math.sin(angle - Math.pi);
+
+      canvas.drawCircle(Offset(dx, dy), 3, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

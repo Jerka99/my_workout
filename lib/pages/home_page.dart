@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rotary_scrollbar/rotary_scrollbar.dart';
 import 'package:my_workout/connectors/stopwatch_connector.dart';
+import 'package:rotary_scrollbar/widgets/rotary_scrollbar.dart';
 import '../add_exercise.dart';
 import '../button_with_title_below.dart';
+import '../connectors/list_connector.dart';
+import '../connectors/table_list_connector.dart';
 import '../exercise.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     return PopScope(
       child: Scaffold(
         body: Container(
-          color: Colors.black,
+          color: Colors.grey[900],
           child: RotaryScrollbar(
             controller: scrollController,
             child: PageView.builder(
@@ -51,7 +53,10 @@ class _HomePageState extends State<HomePage> {
                     icon: Icons.list,
                     text: "list",
                     onClick: () {
-                      MaterialPageRoute(builder: (_) => Container());
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ListConnector()),
+                      );
                     },
                   );
                 }
@@ -66,13 +71,52 @@ class _HomePageState extends State<HomePage> {
                     await widget.onActivitySelect(Exercise(name: exercise));
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => StopwatchConnector()),
+                      MaterialPageRoute(
+                        builder:
+                            (_) => Scaffold(
+                              // backgroundColor: Colors.black,
+                              body: StopwatchWithList(
+                                stopwatch: StopwatchConnector(),
+                                list: TableListConnector(),
+                              ),
+                            ),
+                      ),
                     );
                   },
                 );
               },
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class StopwatchWithList extends StatefulWidget {
+  final Widget stopwatch;
+  final Widget list;
+
+  const StopwatchWithList({
+    super.key,
+    required this.stopwatch,
+    required this.list,
+  });
+
+  @override
+  State<StopwatchWithList> createState() => _StopwatchWithListState();
+}
+
+class _StopwatchWithListState extends State<StopwatchWithList> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        height: 200,
+        width: 200,
+        color: Colors.grey[900],
+        child: ListView(
+          children: [widget.stopwatch, Container(height: 22), widget.list],
         ),
       ),
     );

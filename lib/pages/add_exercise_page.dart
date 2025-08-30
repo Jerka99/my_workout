@@ -28,6 +28,10 @@ class _AddExercisePageState extends State<AddExercisePage> {
           TextField(
             controller: _controller,
             style: const TextStyle(color: Colors.white),
+            autocorrect: false,
+            enableSuggestions: false,
+            textCapitalization: TextCapitalization.none,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               labelText: 'Exercise Name',
               labelStyle: const TextStyle(color: Colors.white70),

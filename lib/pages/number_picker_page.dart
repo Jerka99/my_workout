@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rotary_scrollbar/widgets/rotary_scrollbar.dart';
+import 'package:wear_os_plugin/wear_os_scroll_view.dart';
 
 class NumberPickerPage extends StatefulWidget {
   final String label;
@@ -37,7 +37,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: RotaryScrollbar(
+          child: WearOsScrollView(
             controller: _controller,
             child: ListWheelScrollView.useDelegate(
               controller: _controller,

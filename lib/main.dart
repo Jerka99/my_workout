@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:my_workout/preference_utils.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:wear_os_plugin/wear_os_clipper.dart';
 
 import 'app_state.dart';
 import 'connectors/home_connector.dart';
@@ -46,10 +47,12 @@ class MyApp extends StatelessWidget {
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
         builder: (context, child) {
-          return Scaffold(
-            backgroundColor: Colors.black,
-            body: Center(
-              child: SizedBox(height: 210, width: 210, child: child),
+          return WearOsClipper(
+            child: Scaffold(
+              backgroundColor: Colors.black,
+              body: Center(
+                child: SizedBox(height: 210, width: 210, child: child),
+              ),
             ),
           );
         },

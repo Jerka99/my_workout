@@ -9,7 +9,7 @@ import '../connectors/table_list_connector.dart';
 import '../main.dart';
 import '../models/exercise_session.dart';
 import '../models/one_set.dart';
-import '../pages/home_page.dart';
+import '../pages/stopwatch_with_list.dart';
 
 class AddOneSetAction extends ReduxAction<AppState> {
   final OneSet oneSet;
@@ -186,8 +186,9 @@ class AddExerciseAction extends ReduxAction<AppState> {
   Future<AppState?> reduce() async {
     final box = Hive.box<List>('exerciseBox');
 
-    final List<String> existingExercises =
-    List<String>.from(box.get('exerciseList') ?? []);
+    final List<String> existingExercises = List<String>.from(
+      box.get('exerciseList') ?? [],
+    );
 
     if (!existingExercises.contains(exerciseName)) {
       existingExercises.add(exerciseName);
@@ -206,8 +207,9 @@ class RemoveExerciseAction extends ReduxAction<AppState> {
   @override
   Future<AppState?> reduce() async {
     final box = Hive.box<List>('exerciseBox');
-    final List<String> existingExercises =
-    List<String>.from(box.get('exerciseList') ?? []);
+    final List<String> existingExercises = List<String>.from(
+      box.get('exerciseList') ?? [],
+    );
 
     existingExercises.remove(exerciseName);
     await box.put('exerciseList', existingExercises);
@@ -221,8 +223,9 @@ class LoadExercisesAction extends ReduxAction<AppState> {
   Future<AppState?> reduce() async {
     final box = Hive.box<List>('exerciseBox');
 
-    final List<String> exercises =
-    List<String>.from(box.get('exerciseList') ?? []);
+    final List<String> exercises = List<String>.from(
+      box.get('exerciseList') ?? [],
+    );
 
     return state.copyWith(exerciseNames: exercises);
   }

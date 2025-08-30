@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rotary_scrollbar/widgets/rotary_scrollbar.dart';
+import 'package:wear_os_plugin/wear_os_scroll_view.dart';
 import '../models/exercise.dart';
 import '../models/exercise_session.dart';
 import 'table_list_page.dart';
@@ -19,10 +19,16 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
+  final scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final scrollController = PageController();
-
     final Map<String, List<ExerciseSession>> grouped = {};
     for (var session in widget.sessionList) {
       final key =
@@ -31,11 +37,10 @@ class _ListPageState extends State<ListPage> {
       grouped[key]!.add(session);
     }
 
-    return RotaryScrollbar(
+    return WearOsScrollView(
       controller: scrollController,
       child: ListView(
         controller: scrollController,
-        padding: const EdgeInsets.all(8.0),
         children:
             grouped.entries.map((entry) {
               final dateParts = entry.key.split("-");
@@ -44,7 +49,7 @@ class _ListPageState extends State<ListPage> {
 
               return Card(
                 color: Colors.grey[900],
-                margin: const EdgeInsets.symmetric(vertical: 4),
+                margin: const EdgeInsets.symmetric(vertical: 22),
                 child: ExpansionTile(
                   title: Text(
                     dayStr,
@@ -138,6 +143,7 @@ class _RemovableTableState extends State<RemovableTable> {
                     exercise: Exercise(
                       completedSets: widget.session.completedSets,
                     ),
+                    key: ValueKey(widget.session.exerciseName),
                   ),
                 ),
               ],

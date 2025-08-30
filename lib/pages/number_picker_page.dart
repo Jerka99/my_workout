@@ -18,7 +18,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
   void initState() {
     super.initState();
     _controller = FixedExtentScrollController(
-      initialItem: (widget.initialValue != null ? widget.initialValue! - 1 : 0),
+      initialItem: (widget.initialValue != null ? widget.initialValue! : 0),
     );
   }
 
@@ -44,7 +44,7 @@ class _NumberPickerPageState extends State<NumberPickerPage> {
               itemExtent: 40,
               physics: const FixedExtentScrollPhysics(),
               childDelegate: ListWheelChildBuilderDelegate(
-                childCount: 50, // 1 → 50
+                childCount: 51,
                 builder: (context, index) {
                   final value = index;
                   return Center(

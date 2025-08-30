@@ -1,6 +1,6 @@
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
-import '../actions/add_one_set_action.dart';
+import '../actions/hive_actions.dart';
 import '../app_state.dart';
 import '../pages/start_exercise_page.dart';
 

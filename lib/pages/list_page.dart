@@ -4,50 +4,145 @@ import '../models/exercise.dart';
 import '../models/exercise_session.dart';
 import 'table_list_page.dart';
 
-class ListPage extends StatelessWidget {
+class ListPage extends StatefulWidget {
   final List<ExerciseSession> sessionList;
+  final Function(ExerciseSession selectedSession) onLongPressEnd;
 
-  const ListPage({super.key, required this.sessionList});
+  const ListPage({
+    super.key,
+    required this.sessionList,
+    required this.onLongPressEnd,
+  });
 
+  @override
+  State<ListPage> createState() => _ListPageState();
+}
+
+class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     final scrollController = PageController();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: RotaryScrollbar(
+    final Map<String, List<ExerciseSession>> grouped = {};
+    for (var session in widget.sessionList) {
+      final key =
+          "${session.dateTime.year}-${session.dateTime.month}-${session.dateTime.day}";
+      grouped.putIfAbsent(key, () => []);
+      grouped[key]!.add(session);
+    }
+
+    return RotaryScrollbar(
+      controller: scrollController,
+      child: ListView(
         controller: scrollController,
-        child: ListView.builder(
-          controller: scrollController,
-          padding: const EdgeInsets.all(8.0),
-          itemCount: sessionList.length,
-          itemBuilder: (context, index) {
-            final session = sessionList[index];
-            return Card(
-              color: Colors.grey[900],
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${session.dateTime.month.toString().padLeft(2, '0')}.${session.dateTime.day.toString().padLeft(2, '0')}.${session.dateTime.year}. - ${session.exerciseName}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+        padding: const EdgeInsets.all(8.0),
+        children:
+            grouped.entries.map((entry) {
+              final dateParts = entry.key.split("-");
+              final dayStr =
+                  "${dateParts[2].padLeft(2, '0')}.${dateParts[1].padLeft(2, '0')}.${dateParts[0]}.";
+
+              return Card(
+                color: Colors.grey[900],
+                margin: const EdgeInsets.symmetric(vertical: 4),
+                child: ExpansionTile(
+                  title: Text(
+                    dayStr,
+                    style: const TextStyle(
+                      color: Colors.orange,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 8),
-                    TableListPage(
-                      exercise: Exercise(completedSets: session.completedSets),
-                    ),
-                  ],
+                  ),
+                  children:
+                      entry.value.map((ExerciseSession session) {
+                        return RemovableTable(
+                          session: session,
+                          onLongPressEnd:
+                              (ExerciseSession selectedSession) =>
+                                  widget.onLongPressEnd(selectedSession),
+                        );
+                      }).toList(),
                 ),
-              ),
-            );
+              );
+            }).toList(),
+      ),
+    );
+  }
+}
+
+class RemovableTable extends StatefulWidget {
+  final ExerciseSession session;
+  final Function(ExerciseSession selectedSession) onLongPressEnd;
+
+  const RemovableTable({
+    super.key,
+    required this.session,
+    required this.onLongPressEnd,
+  });
+
+  @override
+  State<RemovableTable> createState() => _RemovableTableState();
+}
+
+class _RemovableTableState extends State<RemovableTable> {
+  bool isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onLongPressStart: (_) {
+        setState(() => isPressed = true);
+      },
+      onLongPressMoveUpdate:
+          (_) => {
+            setState(() {
+              isPressed = false;
+            }),
           },
+      onLongPressCancel:
+          () => {
+            setState(() {
+              isPressed = false;
+            }),
+          },
+      onLongPressEnd:
+          (_) => {
+            setState(() {
+              isPressed = false;
+            }),
+            widget.onLongPressEnd(widget.session),
+          },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+        child: Card(
+          color: Colors.grey[850],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.session.exerciseName,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  color: isPressed ? Colors.red : Colors.transparent,
+
+                  child: TableListPage(
+                    exercise: Exercise(
+                      completedSets: widget.session.completedSets,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

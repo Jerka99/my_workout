@@ -6,8 +6,15 @@ import '../models/one_set.dart';
 
 class TableListPage extends StatelessWidget {
   final Exercise? exercise;
+  final bool displayEndExercise;
+  final Function(String name)? endActivity;
 
-  const TableListPage({super.key, this.exercise});
+  const TableListPage({
+    super.key,
+    this.exercise,
+    bool? displayEndExercise,
+    this.endActivity,
+  }) : displayEndExercise = displayEndExercise ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +43,32 @@ class TableListPage extends StatelessWidget {
               }),
           ],
         ),
+        if (displayEndExercise) ...[
+          Container(height: 12),
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6,
+                  horizontal: 12,
+                ),
+                minimumSize: const Size(80, 32),
+              ),
+              onPressed: () {
+                if (endActivity != null) endActivity!(exercise!.name!);
+              },
+              child: const Text(
+                "SAVE AND FINISH",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

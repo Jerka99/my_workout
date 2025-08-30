@@ -5,7 +5,7 @@ import 'package:my_workout/models/exercise.dart';
 import 'package:my_workout/actions/stopwatch_action.dart';
 import 'package:my_workout/pages/stopwatch_widget_page.dart';
 import '../../../main.dart';
-import '../actions/add_one_set_action.dart';
+import '../actions/hive_actions.dart';
 import '../app_state.dart';
 import '../models/one_set.dart';
 

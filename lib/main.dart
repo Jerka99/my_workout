@@ -18,7 +18,7 @@ Future<void> initHive() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WakelockPlus.enable();
-  initHive();
+  await initHive();
   await PreferenceUtils.init();
   store = Store<AppState>(initialState: AppState.initialState());
 
@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Color.fromRGBO(242, 242, 242, 1),
           pageTransitionsTheme: PageTransitionsTheme(
             builders: {
-              TargetPlatform.android: CustomPageTransitionBuilder(),
-              TargetPlatform.iOS: CustomPageTransitionBuilder(),
+              // TargetPlatform.android: CustomPageTransitionBuilder(),
+              // TargetPlatform.iOS: CustomPageTransitionBuilder(),
             },
           ),
           // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

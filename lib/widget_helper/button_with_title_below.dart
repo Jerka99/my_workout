@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ButtonWithTitleBelow extends StatefulWidget {
   final String text;
   final Function() onClick;
   final IconData? icon;
+  final String? svgAsset;
   final bool enabled;
   final Color enabledColor;
 
@@ -11,6 +13,7 @@ class ButtonWithTitleBelow extends StatefulWidget {
     super.key,
     required this.text,
     required this.onClick,
+    this.svgAsset,
     this.icon,
     bool? enabled,
     Color? enabledColor,
@@ -23,7 +26,29 @@ class ButtonWithTitleBelow extends StatefulWidget {
 
 class _ButtonWithTitleBelowState extends State<ButtonWithTitleBelow> {
   @override
+  void initState() {
+    print(widget.svgAsset);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    Widget buttonChild;
+
+    if (widget.svgAsset != null) {
+      buttonChild = Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Center(
+          child: SvgPicture.asset(
+            widget.svgAsset!,
+            // width: 33,
+            // height: 33,
+          ),
+        ),
+      );
+    } else {
+      buttonChild = Icon(widget.icon, color: Colors.white, size: 33);
+    }
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -37,11 +62,7 @@ class _ButtonWithTitleBelowState extends State<ButtonWithTitleBelow> {
                     widget.enabled ? widget.enabledColor : Colors.grey,
                 padding: EdgeInsets.zero,
               ),
-              child: Icon(
-                widget.icon ?? Icons.work_outline,
-                color: Colors.white,
-                size: 33,
-              ),
+              child: buttonChild,
               onPressed: () => widget.enabled ? widget.onClick() : {},
             ),
           ),

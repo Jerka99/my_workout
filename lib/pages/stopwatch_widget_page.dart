@@ -126,14 +126,17 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  Container(
                     width: 40,
                     height: 40,
-                    child: ElevatedButton(
+                    padding: EdgeInsets.zero,
+                    child: IconButton(
+                      padding: EdgeInsets.all(0),
+                      constraints: BoxConstraints(),
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         backgroundColor: Colors.white,
-                        iconColor: Colors.grey[900],
+                        iconColor: Colors.black,
                       ),
                       onPressed: () {
                         if (widget.isRunning == false) {
@@ -144,10 +147,13 @@ class _StopwatchWidgetState extends State<StopwatchWidget> {
                           widget.pauseStopwatch();
                         }
                       },
-                      child:
+                      icon:
                           widget.isRunning
                               ? Icon(Icons.stop)
-                              : Icon(Icons.not_started_sharp),
+                              : Icon(
+                                Icons.not_started_outlined,
+                                size: 40,
+                              ),
                     ),
                   ),
                   SizedBox(width: 33),

@@ -18,7 +18,7 @@ class AddOneSetAction extends ReduxAction<AppState> {
   AddOneSetAction({required this.oneSet, required this.name});
 
   @override
-  Future<AppState> reduce() async {
+  Future<AppState?> reduce() async {
     final List<OneSet> currentList = [
       ...store.state.exercise.completedSets,
       oneSet,
@@ -32,6 +32,7 @@ class AddOneSetAction extends ReduxAction<AppState> {
           currentList: currentList,
         ),
       );
+      return null;
     }
     return state.copyWith(
       exercise: store.state.exercise.copyWith(completedSets: currentList),

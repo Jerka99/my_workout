@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_workout/connectors/add_exercise_connector.dart';
 import 'package:my_workout/connectors/stopwatch_connector.dart';
 import 'package:my_workout/main.dart';
@@ -88,7 +89,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: ButtonWithTitleBelow(
                 svgAsset: "assets/svg/${exercise.trim().toLowerCase().replaceAll(" ", '')}.svg",
-                enabledColor: const Color.fromARGB(255, 255, 166, 0),
+                enabledColor: const Color.fromARGB(178, 255, 166, 0),
                 enabled:
                     widget.activeExercise?.name == exercise ||
                     widget.activeExercise?.name == null,
